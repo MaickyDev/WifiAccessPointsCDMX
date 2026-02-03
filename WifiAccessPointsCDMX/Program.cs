@@ -1,5 +1,6 @@
 using OfficeOpenXml;
 using FluentValidation;
+using Scalar.AspNetCore;
 using WifiAccessPointsCDMX.Data;
 using WifiAccessPointsCDMX.Models;
 using Microsoft.EntityFrameworkCore;
@@ -38,6 +39,7 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
+    app.MapScalarApiReference();
 }
 
 app.UseHttpsRedirection();
