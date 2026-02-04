@@ -1,5 +1,10 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
 
+
+  <PropertyGroup>
+    <Autor>Miguel Neftali Ruiz Cauich</Autor>
+    <LinkedIn>https://www.linkedin.com/in/miguel-neftali-ruiz-cauich-3964aa236</LinkedIn>
+  </PropertyGroup>
   <PropertyGroup>
     <TargetFramework>net10.0</TargetFramework>
     <Nullable>enable</Nullable>
