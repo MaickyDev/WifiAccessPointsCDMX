@@ -14,6 +14,7 @@ namespace WifiAccessPointsCDMX.Controllers.v1
             _service = service;
         }
 
+        // Import Excel file information of access points into database
         [HttpPost("import")]
         public async Task<IActionResult> Import(IFormFile file)
         {

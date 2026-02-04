@@ -7,10 +7,12 @@ namespace WifiAccessPointsCDMX.Data
     {
         public AccessPointsDbContext(DbContextOptions<AccessPointsDbContext> options) : base(options) { }
 
+        // Exposes the models tables as a DbSet so EF Core can query, insert, update, and delete Program records
         public DbSet<ProgramModel> Programs => Set<ProgramModel>();
         public DbSet<AlcaldiaModel> Alcaldias => Set<AlcaldiaModel>();
         public DbSet<AccessPointModel> AccessPoints => Set<AccessPointModel>();
 
+        // Configure EF Core model mappings and database schema details
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<AlcaldiaModel>()

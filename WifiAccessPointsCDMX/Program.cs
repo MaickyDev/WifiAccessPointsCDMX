@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using WifiAccessPointsCDMX.Services;
 using WifiAccessPointsCDMX.Interfaces;
 using WifiAccessPointsCDMX.Validators;
+using WifiAccessPointsCDMX.Middlewares;
 using WifiAccessPointsCDMX.Repositories;
 using WifiAccessPointsCDMX.Interfaces.Services;
 using WifiAccessPointsCDMX.Interfaces.Repositories;
@@ -42,6 +43,8 @@ if (app.Environment.IsDevelopment())
     app.MapOpenApi();
     app.MapScalarApiReference();
 }
+
+app.UseMiddleware<ExceptionMiddleware>();
 
 app.UseHttpsRedirection();
 

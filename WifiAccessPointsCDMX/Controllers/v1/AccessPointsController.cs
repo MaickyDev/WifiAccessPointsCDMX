@@ -14,6 +14,7 @@ namespace WifiAccessPointsCDMX.Controllers.v1
             _service = service;
         }
 
+        // Obtain a paginated list and the total number of access points
         [HttpGet]
         public async Task<IActionResult> GetPaged(int page = 1, int pageSize = 20)
         {
@@ -21,6 +22,7 @@ namespace WifiAccessPointsCDMX.Controllers.v1
             return Ok(result);
         }
 
+        // Get an access point by ID
         [HttpGet("{id}")]
         public async Task<IActionResult> GetByExternalId(string id)
         {
@@ -32,6 +34,7 @@ namespace WifiAccessPointsCDMX.Controllers.v1
             return Ok(ap);
         }
 
+        // Obtain a paginated list and the total number of access points by alcaldia
         [HttpGet("alcaldia/{alcaldiaId}")]
         public async Task<IActionResult> GetByAlcaldia(int alcaldiaId, int page = 1, int pageSize = 20)
         {
@@ -39,6 +42,7 @@ namespace WifiAccessPointsCDMX.Controllers.v1
             return Ok(result);
         }
 
+        // Obtain a paginated list and the total points ordered by proximity to a coordinate.
         [HttpGet("nearby")]
         public async Task<IActionResult> GetNearby(
             double latitude,

@@ -32,13 +32,14 @@ namespace WifiAccessPointsCDMX.Repositories
                 DestinationTableName = "AccessPoints"
             };
 
-            // Explicit column mappings
+            // Map .NET properties to SQL columns
             bulk.ColumnMappings.Add("Code", "Code");
             bulk.ColumnMappings.Add("Latitude", "Latitude");
             bulk.ColumnMappings.Add("Longitude", "Longitude");
             bulk.ColumnMappings.Add("ProgramId", "ProgramId");
             bulk.ColumnMappings.Add("AlcaldiaId", "AlcaldiaId");
 
+            // Build a DataTable that matches the SQL schema
             var table = new DataTable();
             table.Columns.Add("Code", typeof(string));
             table.Columns.Add("Latitude", typeof(double));
@@ -46,22 +47,16 @@ namespace WifiAccessPointsCDMX.Repositories
             table.Columns.Add("ProgramId", typeof(int));
             table.Columns.Add("AlcaldiaId", typeof(int));
 
-
+            // Load rows into the DataTable
             foreach (var ap in items)
             {
-                if (ap.AlcaldiaId == 0)
-                {
-                    throw new Exception($"AlcaldiaId is missing for Code={ap.Code}");
-                }
-                else
-                {
-                    table.Rows.Add(ap.Code, ap.Latitude, ap.Longitude, ap.ProgramId, ap.AlcaldiaId);
-                }
+                table.Rows.Add(ap.Code, ap.Latitude, ap.Longitude, ap.ProgramId, ap.AlcaldiaId);
             }
 
             await bulk.WriteToServerAsync(table);
         }
 
+        // Load related Program and Alcaldia entities, apply pagination and execute the query
         public Task<int> CountAsync() =>
             _db.AccessPoints.CountAsync();
 

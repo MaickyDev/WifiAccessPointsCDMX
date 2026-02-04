@@ -19,15 +19,6 @@ namespace WifiAccessPointsCDMX.Repositories
         public Task<List<ProgramModel>> GetAllAsync() =>
             _db.Programs.ToListAsync();
 
-        public Task<ProgramModel?> GetByNameAsync(string name) =>
-            _db.Programs.FirstOrDefaultAsync(p => p.Name == name);
-
-        public async Task AddAsync(ProgramModel program)
-        {
-            _db.Programs.Add(program);
-            await _db.SaveChangesAsync();
-        }
-
         public async Task BulkInsertAsync(List<ProgramModel> items)
         {
             if (items.Count == 0)
@@ -41,11 +32,14 @@ namespace WifiAccessPointsCDMX.Repositories
                 DestinationTableName = "Programs"
             };
 
+            // Map .NET properties to SQL columns
             bulk.ColumnMappings.Add("Name", "Name");
 
+            // Build a DataTable that matches the SQL schema
             var table = new DataTable();
             table.Columns.Add("Name", typeof(string));
 
+            // Load rows into the DataTable
             foreach (var p in items)
                 table.Rows.Add(p.Name);
 

@@ -19,15 +19,6 @@ namespace WifiAccessPointsCDMX.Repositories
         public Task<List<AlcaldiaModel>> GetAllAsync() =>
             _db.Alcaldias.ToListAsync();
 
-        public Task<AlcaldiaModel?> GetByNameAsync(string name) =>
-            _db.Alcaldias.FirstOrDefaultAsync(a => a.Name == name);
-
-        public async Task AddAsync(AlcaldiaModel alcaldia)
-        {
-            _db.Alcaldias.Add(alcaldia);
-            await _db.SaveChangesAsync();
-        }
-
         public async Task BulkInsertAsync(List<AlcaldiaModel> items)
         {
             if (items.Count == 0)
@@ -41,11 +32,14 @@ namespace WifiAccessPointsCDMX.Repositories
                 DestinationTableName = "cat.Alcaldias"
             };
 
+            // Map .NET properties to SQL columns
             bulk.ColumnMappings.Add("Name", "Name");
 
+            // Build a DataTable that matches the SQL schema
             var table = new DataTable();
             table.Columns.Add("Name", typeof(string));
 
+            // Load rows into the DataTable
             foreach (var a in items)
                 table.Rows.Add(a.Name);
 
