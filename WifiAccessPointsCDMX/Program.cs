@@ -22,7 +22,7 @@ builder.Services.AddOpenApi();
 // Unit of Work map
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddDbContext<AccessPointsDbContext>(
-    options => options.UseSqlServer(builder.Configuration.GetConnectionString("SqlServer")));
+    options => options.UseSqlServer(builder.Configuration.GetConnectionString("sqlServer")));
 // Respositories map
 builder.Services.AddScoped<IProgramRepository, ProgramRepository>();
 builder.Services.AddScoped<IAlcaldiaRepository, AlcaldiaRepository>();
