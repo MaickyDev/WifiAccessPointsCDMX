@@ -51,6 +51,5 @@ namespace WifiAccessPointsCDMX.Repositories
 
             await bulk.WriteToServerAsync(table);
         }
-
     }
 }

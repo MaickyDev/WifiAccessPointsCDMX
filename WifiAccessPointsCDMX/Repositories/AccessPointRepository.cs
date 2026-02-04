@@ -62,5 +62,33 @@ namespace WifiAccessPointsCDMX.Repositories
             await bulk.WriteToServerAsync(table);
         }
 
+        public Task<int> CountAsync() =>
+            _db.AccessPoints.CountAsync();
+
+        public Task<int> CountByAlcaldiaAsync(int alcaldiaId) =>
+            _db.AccessPoints.CountAsync(a => a.AlcaldiaId == alcaldiaId);
+
+        public Task<List<AccessPointModel>> GetPagedAsync(int skip, int take) =>
+            _db.AccessPoints.Include(a => a.Program).Include(a => a.Alcaldia).Skip(skip).Take(take).ToListAsync();
+
+        public Task<List<AccessPointModel>> GetPagedByAlcaldiaAsync(int alcaldiaId, int skip, int take) =>
+            _db.AccessPoints.Include(a => a.Program).Include(a => a.Alcaldia).Where(a => a.AlcaldiaId == alcaldiaId).Skip(skip).Take(take).ToListAsync();
+
+        public Task<AccessPointModel?> GetByExternalIdAsync(string externalId) =>
+            _db.AccessPoints.Include(a => a.Program).Include(a => a.Alcaldia).FirstOrDefaultAsync(a => a.Code == externalId);
+
+        public Task<List<AccessPointModel>> GetNearbyPagedAsync(double lat, double lng, int skip, int take)
+        {
+            return _db.AccessPoints
+                .Include(a => a.Program)
+                .Include(a => a.Alcaldia)
+                .OrderBy(a =>
+                    (a.Latitude - lat) * (a.Latitude - lat) +
+                    (a.Longitude - lng) * (a.Longitude - lng)
+                )
+                .Skip(skip)
+                .Take(take)
+                .ToListAsync();
+        }
     }
 }

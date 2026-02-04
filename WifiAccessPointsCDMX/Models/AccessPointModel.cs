@@ -1,4 +1,6 @@
-﻿namespace WifiAccessPointsCDMX.Models
+﻿using System.Text.Json.Serialization;
+
+namespace WifiAccessPointsCDMX.Models
 {
     public class AccessPointModel
     {
@@ -7,11 +9,12 @@
         public double Latitude { get; set; }
         public double Longitude { get; set; }
         // Program properties
+        [JsonIgnore]
         public int ProgramId { get; set; }
-        public ProgramModel? Program { get; set; }
+        public virtual ProgramModel? Program { get; set; }
         // Alcaldia properties
+        [JsonIgnore]
         public int AlcaldiaId { get; set; }
-        public AlcaldiaModel? Alcaldia { get; set; }
-
+        public virtual AlcaldiaModel? Alcaldia { get; set; }
     }
 }

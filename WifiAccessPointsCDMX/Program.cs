@@ -28,6 +28,7 @@ builder.Services.AddScoped<IAlcaldiaRepository, AlcaldiaRepository>();
 builder.Services.AddScoped<IAccessPointRepository, AccessPointRepository>();
 // Services map
 builder.Services.AddScoped<IExcelService, ExcelService>();
+builder.Services.AddScoped<IAccessPointService, AccessPointService>();
 // Validator map
 builder.Services.AddScoped<IValidator<ExcelAccessPointModel>, ExcelAccessPointValidator>();
 // EPPlus

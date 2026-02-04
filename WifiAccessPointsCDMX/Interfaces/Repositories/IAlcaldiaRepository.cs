@@ -8,6 +8,5 @@ namespace WifiAccessPointsCDMX.Interfaces.Repositories
         Task<AlcaldiaModel?> GetByNameAsync(string name);
         Task AddAsync(AlcaldiaModel alcaldia);
         Task BulkInsertAsync(List<AlcaldiaModel> items);
-
     }
 }
