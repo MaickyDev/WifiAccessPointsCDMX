@@ -100,5 +100,11 @@ namespace WifiAccessPointsCDMX.Services
                 throw;
             }
         }
+
+        // GraphQL
+        public IQueryable<AccessPointModel> GetAccessPointsQuery()
+        {
+            return _uow.AccessPoints.GetQueryable();
+        }
     }
 }

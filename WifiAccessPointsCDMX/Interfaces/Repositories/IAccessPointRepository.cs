@@ -12,5 +12,8 @@ namespace WifiAccessPointsCDMX.Interfaces.Repositories
         Task<List<AccessPointModel>> GetPagedByAlcaldiaAsync(int alcaldiaId, int skip, int take);
         Task<AccessPointModel?> GetByExternalIdAsync(string externalId);
         Task<List<AccessPointModel>> GetNearbyPagedAsync(double lat, double lng, int skip, int take);
+
+        // GraphQL
+        IQueryable<AccessPointModel> GetQueryable();
     }
 }

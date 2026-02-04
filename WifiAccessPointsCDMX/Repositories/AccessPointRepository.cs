@@ -85,5 +85,11 @@ namespace WifiAccessPointsCDMX.Repositories
                 .Take(take)
                 .ToListAsync();
         }
+
+        // GraphQL
+        public IQueryable<AccessPointModel> GetQueryable()
+        {
+            return _db.AccessPoints;
+        }
     }
 }

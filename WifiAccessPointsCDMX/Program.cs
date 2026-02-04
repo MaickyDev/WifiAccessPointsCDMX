@@ -3,6 +3,7 @@ using FluentValidation;
 using Scalar.AspNetCore;
 using WifiAccessPointsCDMX.Data;
 using WifiAccessPointsCDMX.Models;
+using WifiAccessPointsCDMX.GraphQL;
 using Microsoft.EntityFrameworkCore;
 using WifiAccessPointsCDMX.Services;
 using WifiAccessPointsCDMX.Interfaces;
@@ -34,6 +35,13 @@ builder.Services.AddScoped<IAccessPointService, AccessPointService>();
 builder.Services.AddScoped<IValidator<ExcelAccessPointModel>, ExcelAccessPointValidator>();
 // EPPlus
 ExcelPackage.License.SetNonCommercialPersonal(builder.Configuration["EPPlus:fullName"]);
+// GraphQL
+builder.Services
+    .AddGraphQLServer()
+    .AddQueryType<Query>()
+    .AddProjections()
+    .AddFiltering()
+    .AddSorting();
 
 var app = builder.Build();
 
@@ -43,6 +51,8 @@ if (app.Environment.IsDevelopment())
     app.MapOpenApi();
     app.MapScalarApiReference();
 }
+
+app.MapGraphQL();
 
 app.UseMiddleware<ExceptionMiddleware>();
 
