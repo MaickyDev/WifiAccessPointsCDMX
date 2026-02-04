@@ -64,6 +64,77 @@ erDiagram
     <img src="./Assets/Diagrams/Logical-ER.png" width="600" alt="Excel ETL Flow" />
 </p>
 
+## Script to create the database schema
+```SQL
+------------------------------------------------------------
+-- Create database
+------------------------------------------------------------
+CREATE DATABASE WifiAccessPoints;
+GO
+
+USE WifiAccessPoints;
+GO
+
+------------------------------------------------------------
+-- Create schema Catalogs
+------------------------------------------------------------
+CREATE SCHEMA cat;
+GO
+
+------------------------------------------------------------
+-- Catalog table: Alcaldias
+------------------------------------------------------------
+CREATE TABLE cat.Alcaldias (
+    [Id] INT IDENTITY(1,1) PRIMARY KEY,
+    [Name] NVARCHAR(150) NOT NULL UNIQUE
+);
+GO
+
+------------------------------------------------------------
+-- Catalog table: Programs
+------------------------------------------------------------
+CREATE TABLE Programs (
+    [Id] INT IDENTITY(1,1) PRIMARY KEY,
+    [Name] NVARCHAR(200) NOT NULL UNIQUE
+);
+GO
+
+------------------------------------------------------------
+-- Main table: Access Points
+------------------------------------------------------------
+CREATE TABLE AccessPoints  (
+    Id INT IDENTITY(1,1) PRIMARY KEY,
+    
+    -- Natural ID from the Excel file
+    Code NVARCHAR(100) NOT NULL UNIQUE,
+
+    Latitude FLOAT NOT NULL,
+    Longitude FLOAT NOT NULL,
+
+    ProgramId INT NOT NULL,
+    AlcaldiaId INT NOT NULL,
+
+    CONSTRAINT FK_AccessPoint_Program
+        FOREIGN KEY (ProgramId) REFERENCES Programs(Id),
+
+    CONSTRAINT FK_AccessPoint_Alcaldia
+        FOREIGN KEY (AlcaldiaId) REFERENCES cat.Alcaldias(Id)
+);
+GO
+```
+
+## Configure the API
+1.  fullName: you can set your real name, this setting is required by EPPlus library to the license.
+2.  sqlServer: it's the database ConnectionString where the schema mentioned above is created.
+```json
+"EPPlus": {
+    "fullName": "Maicky Hatake"
+  },
+  "ConnectionStrings": {
+    "SqlServer": "Server={server};Database=WifiAccessPoints;User Id={User};Password={Password};TrustServerCertificate=True;"
+  }
+```
+
 ## Import Workflow
 1.  Extract Excel rows.
 2.  Validate DTOs.
@@ -82,6 +153,7 @@ erDiagram
 * Deduplicates Programs, Alcaldías, and AccessPoints using HashSets.
 * Resolves foreign keys in memory.
 * Performs bulk inserts for Programs, Alcaldías, and AccessPoints.
+* Handle exceptions, log them, and return a consistent JSON error with a traceId that helps correlate the logs with the client side. 
 
 ## Architecture
 * **API Layer**: Upload endpoint.
@@ -89,6 +161,7 @@ erDiagram
 * **Repository Layer**: Bulk inserts and queries.
 * **Domain Layer**: Entities (ProgramModel, AlcaldiaModel, AccessPointModel).
 * **Infrastructure Layer**: EF Core and SQL Server.
+* **Middleware layer**: handle exceptions.
 
 ## Technical Details
 
