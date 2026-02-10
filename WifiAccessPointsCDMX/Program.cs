@@ -16,6 +16,14 @@ using WifiAccessPointsCDMX.Interfaces.Repositories;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+string? secretPath = builder.Configuration["ConnectionStrings:DefaultConnection"];
+
+// 2. If the file exists, read it and overwrite the DefaultConnection
+if (!string.IsNullOrEmpty(secretPath) && File.Exists(secretPath))
+{
+    string secretValue = File.ReadAllText(secretPath).Trim();
+    builder.Configuration["ConnectionStrings:DefaultConnection"] = secretValue;
+}
 
 builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
@@ -23,7 +31,7 @@ builder.Services.AddOpenApi();
 // Unit of Work map
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddDbContext<AccessPointsDbContext>(
-    options => options.UseSqlServer(builder.Configuration.GetConnectionString("sqlServer")));
+    options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 // Respositories map
 builder.Services.AddScoped<IProgramRepository, ProgramRepository>();
 builder.Services.AddScoped<IAlcaldiaRepository, AlcaldiaRepository>();

@@ -1,0 +1,38 @@
+﻿services:
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+      - "8081:8081"
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ASPNETCORE_URLS: "https://+:8081;http://+:8080"
+      ConnectionStrings__DefaultConnection: "/run/secrets/db_connection"
+      Kestrel__Certificates__Default__Password: "YourPassword123!"
+      Kestrel__Certificates__Default__Path: "/https/aspnetapp.pfx"
+    secrets:
+      - db_connection
+    depends_on:
+      - db
+    volumes:
+      - ~/.aspnet/https:/https:ro
+
+  db:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    user: root
+    environment:
+      ACCEPT_EULA: "Y"
+      SA_PASSWORD: "Your_password123"
+    ports:
+      - "1433:1433"
+    volumes:
+      - sql_data:/var/opt/mssql/data
+
+secrets:
+  db_connection:
+    file: ./secrets/db_connection.txt
+
+volumes:
+  sql_data:
